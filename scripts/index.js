@@ -22,6 +22,7 @@ function createCard(cardData, deleteCallback) {
   const removeCard = cardElement.querySelector(".card__delete-button");
 
   cardImage.src = cardData.link;
+  cardImage.alt = cardData.name;
   cardTitle.textContent = cardData.name;
 
   removeCard.addEventListener("click", deleteCallback);
