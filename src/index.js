@@ -1,12 +1,11 @@
 import "./pages/index.css";
+import { initialCards } from "./components/cards.js";
+import { createCard, removeCard, toggleLike } from "./components/card.js";
 import {
-  initialCards,
-  createCard,
-  removeCard,
-  toggleLike,
-  openImagePopup,
-} from "./components/cards.js";
-import { openModal, closeModal } from "./components/modal.js";
+  openModal,
+  closeModal,
+  addModalListeners,
+} from "./components/modal.js";
 
 const placesList = document.querySelector(".places__list");
 
@@ -16,10 +15,18 @@ const addCardPopupButton = document.querySelector(".profile__add-button");
 const profileForm = document.querySelector('form[name="edit-profile"]');
 const nameInput = profileForm.querySelector('input[name="name"]');
 const jobInput = profileForm.querySelector('input[name="description"]');
+const editPopup = document.querySelector(".popup_type_edit");
 
 const cardForm = document.querySelector('form[name="new-place"]');
 const titleInput = cardForm.querySelector('input[name="place-name"]');
 const linkInput = cardForm.querySelector('input[name="link"]');
+const cardPopup = document.querySelector(".popup_type_new-card");
+
+const popupOpenImage = document.querySelector(".popup_type_image");
+const popupImage = popupOpenImage.querySelector(".popup__image");
+const popupCaption = popupOpenImage.querySelector(".popup__caption");
+
+document.querySelectorAll(".popup").forEach(addModalListeners);
 
 function renderCards(cardList) {
   placesList.innerHTML = "";
@@ -49,32 +56,12 @@ addCardPopupButton.addEventListener("click", function () {
   openModal(addCardPopup);
 });
 
-document.body.addEventListener("click", function (event) {
-  const popup = event.target.closest(".popup");
-
-  if (
-    event.target.classList.contains("popup__close") ||
-    event.target.classList.contains("popup_is-opened")
-  ) {
-    closeModal(popup);
-  }
-});
-
-document.addEventListener("keydown", function (event) {
-  const openPopup = document.querySelector(".popup_is-opened");
-
-  if (event.key === "Escape") {
-    closeModal(openPopup);
-  }
-});
-
 function handleProfileFormSubmit(evt) {
   evt.preventDefault();
 
   document.querySelector(".profile__title").textContent = nameInput.value;
   document.querySelector(".profile__description").textContent = jobInput.value;
 
-  const editPopup = document.querySelector(".popup_type_edit");
   closeModal(editPopup);
 }
 
@@ -89,15 +76,26 @@ function handleCardFormSubmit(evt) {
     link: cardLink,
   };
 
-  initialCards.unshift(newCard);
-
-  const cardElement = createCard(newCard, removeCard);
+  const cardElement = createCard(
+    newCard,
+    removeCard,
+    toggleLike,
+    openImagePopup
+  );
   placesList.prepend(cardElement);
 
   cardForm.reset();
 
   const cardPopup = document.querySelector(".popup_type_new-card");
   closeModal(cardPopup);
+}
+
+function openImagePopup(event) {
+  popupImage.src = event.target.src;
+  popupImage.alt = event.target.alt;
+  popupCaption.textContent = event.target.alt;
+
+  openModal(popupOpenImage);
 }
 
 profileForm.addEventListener("submit", handleProfileFormSubmit);
