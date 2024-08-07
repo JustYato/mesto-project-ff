@@ -14,9 +14,19 @@
   margin-top: 48px;
 }
 
+.button__delete-card {
+  margin-top: 0px;
+}
+
 .popup__button:hover {
   background: rgba(0, 0, 0, 0.8);
   cursor: pointer;
+}
+
+.button_inactive {
+  background: #fff;
+  color: #c4c4c4;
+  border: 1px solid #c4c4c4;
 }
 
 @media screen and (max-width: 568px) {
