@@ -1,9 +1,7 @@
 import { deleteCard, addLike, removeLike } from "./api.js";
 
-const cardTemplate = document.querySelector("#card-template").content;
-
 function removeCard(cardElement, cardId) {
-  deleteCard(cardId)
+  return deleteCard(cardId)
     .then(() => {
       cardElement.remove();
     })
@@ -51,6 +49,11 @@ function updateLikeState(likeButton, likes, userId) {
   likeCounter.textContent = likes.length;
 }
 
+function getCardTemplate() {
+  const cardTemplate = document.querySelector("#card-template").content;
+  return cardTemplate.cloneNode(true);
+}
+
 function createCard(
   cardData,
   userId,
@@ -58,7 +61,7 @@ function createCard(
   likeCallback,
   imageClickCallback
 ) {
-  const cardElement = cardTemplate.cloneNode(true);
+  const cardElement = getCardTemplate();
   const cardItem = cardElement.querySelector(".card");
 
   const cardImage = cardElement.querySelector(".card__image");
@@ -91,4 +94,4 @@ function createCard(
   return cardElement;
 }
 
-export { createCard, removeCard, handleLike };
+export { createCard, removeCard, handleLike, getCardTemplate };

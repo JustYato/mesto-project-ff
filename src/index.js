@@ -12,8 +12,9 @@ import {
   updateUserInfo,
   addNewCard,
   updateAvatar,
+  deleteCard,
 } from "./components/api.js";
-import { setButtonToLoading, resetButton } from "./components/button.js";
+import { setButtonToLoading, resetButton } from "./components/utils.js";
 
 document.addEventListener("DOMContentLoaded", () => {
   const placesList = document.querySelector(".places__list");
@@ -76,8 +77,13 @@ document.addEventListener("DOMContentLoaded", () => {
     event.preventDefault();
 
     if (cardToDelete) {
-      removeCard(cardToDelete.cardElement, cardToDelete.cardId);
-      closeModal(popupDeleteCard);
+      removeCard(cardToDelete.cardElement, cardToDelete.cardId)
+        .then(() => {
+          closeModal(popupDeleteCard);
+        })
+        .catch((err) => {
+          console.log(err);
+        });
     }
   });
 
